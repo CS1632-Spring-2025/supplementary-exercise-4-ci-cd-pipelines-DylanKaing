@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
+      contents: read # This is fine as we only have to check the repositiory and not change anything
 
     steps:
 
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
+      contents: write # changed from read to write so we can write the graph
 
     steps:
 
