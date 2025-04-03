@@ -45,8 +45,17 @@ jobs:
         name: Jacoco coverage results
         path: target/site/jacoco
 
+    - name: Cache build
+      uses: actions/cache@v3
+      with:
+        key: cached-build-${{github.sha}}
+        path: .
+
   # Uploads dependency graph to GitHub to receive Dependabot alerts 
   update_dependence_graph:
+
+    # Means it needs the maven_test job to run to work.
+    needs: maven_test
 
     runs-on: ubuntu-latest
 
@@ -55,10 +64,13 @@ jobs:
 
     steps:
 
-    # The uses: keyword invokes a GitHub action:
-    # https://github.com/marketplace/actions/checkout
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    # Need to add this stop so we can check the source and dfor any docker containers
+    # By checking the cache as we stored the files in the cache within the cloud making it easier and faster to load
+    - name: Restore cached build
+      uses: actions/cache@v3
+      with:
+        key: cached-build-${{github.sha}}
+        path: .
 
     # https://github.com/marketplace/actions/maven-dependency-tree-dependency-submission
     - name: Update dependency graph
